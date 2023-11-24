@@ -3,7 +3,7 @@ import { userStateContext } from "../context/ContextProvider";
 
 export default function GuestLayout () {
 
-    const {userToken} = userStateContext();
+    const {currentUser, userToken} = userStateContext();
 
     if(userToken){
         return <Navigate to='/' />
@@ -19,7 +19,7 @@ export default function GuestLayout () {
                     alt="Your Company"
                     />
                 </div>
-        
+                {currentUser.name}
                 <Outlet />
             </div>
 

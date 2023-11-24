@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 const StateContext = createContext({
     currentUser     :       {},
-    userToken       :       '',
+    userToken       :       null,
     surveys         :       [],
     setCurrentUser  :       ()  =>  {},
     setUserToken    :       ()  =>  {},
@@ -13,7 +13,7 @@ const tmpSurveys =
 [
     {
         "id": 1,
-        "image_url": "https:\/\/api.yoursurveys.xyz\/images\/vJutXzn02CDwdOyh.png",
+        "image_url": "https://picsum.photos/200/300?random=1",
         "title": "TheCodeholic YouTube channel",
         "slug": "thecodeholic-youtube-channel",
         "status": true,
@@ -151,46 +151,51 @@ const tmpSurveys =
             "data": []
           }
         ]
-      },
-      {
-        "id": 2,
-        "image_url": "https:\/\/api.yoursurveys.xyz\/images\/gjIHElz4aKrL0nT0.png",
-        "title": "React",
-        "slug": "react",
-        "status": true,
-        "description": "React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.",
-        "created_at": "2022-01-07 08:50:40",
-        "updated_at": "2022-01-07 13:37:37",
-        "expire_date": "2022-02-01",
-        "questions": []
-      },
-      {
-        "id": 3,
-        "image_url": "https:\/\/api.yoursurveys.xyz\/images\/WPfzo0g66huUYYwR.png",
-        "title": "Laravel 9",
-        "slug": "laravel-9",
-        "status": true,
-        "description": "Laravel is a web application framework with expressive, elegant syntax. We\u2019ve already laid the foundation \u2014 freeing you to create without sweating the small things.",
-        "created_at": "2022-01-07 13:28:56",
-        "updated_at": "2022-01-07 13:28:56",
-        "expire_date": "2022-01-20",
-        "questions": []
-      },
+    },
+    {
+      "id": 2,
+      "image_url": "https://picsum.photos/200/300?random=2",
+      "title": "React",
+      "slug": "react",
+      "status": true,
+      "description": "React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.",
+      "created_at": "2022-01-07 08:50:40",
+      "updated_at": "2022-01-07 13:37:37",
+      "expire_date": "2022-02-01",
+      "questions": []
+    },
+    {
+      "id": 3,
+      "image_url": "https://picsum.photos/200/300?random=3",
+      "title": "Laravel 9",
+      "slug": "laravel-9",
+      "status": true,
+      "description": "Laravel is a web application framework with expressive, elegant syntax. We\u2019ve already laid the foundation \u2014 freeing you to create without sweating the small things.",
+      "created_at": "2022-01-07 13:28:56",
+      "updated_at": "2022-01-07 13:28:56",
+      "expire_date": "2022-01-20",
+      "questions": []
+    },
 ]
 
 export const ContextProvider = ({children}) => {
     
-    const [currentUser, setCurrentUser]   =   useState(
-        {
-            name: 'Tom Cook',
-            email: 'tom@example.com',
-            imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        }
-      );
-    
-      const [userToken, setUserToken]       =   useState(1234)
+      const [currentUser, setCurrentUser]   =   useState({});
+      const [userToken, _setUserToken]       =   useState(localStorage.getItem('TOKEN') || '')
       const [surveys, setSurveys]           =   useState(tmpSurveys)
+
+
+      const setUserToken = (token) => {
+        if(token){
+          localStorage.setItem('TOKEN',token)
+        }
+        else{
+          localStorage.removeItem('TOKEN')
+        }
+
+        _setUserToken(token)
+      }
+
 
     return (
         <StateContext.Provider value={{
