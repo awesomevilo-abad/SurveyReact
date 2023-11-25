@@ -3,6 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
 import { userStateContext } from '../context/ContextProvider'
+import axiosClient from '../axios'
 
 // const user = {
 //   name: 'Tom Cook',
@@ -18,21 +19,25 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 
-const logout = (ev) => {
-    ev.preventDefault()
-    console.log('logout')
-}
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function DefaultLayout() {
 
-  const {currentUser, userToken} = userStateContext();
+  const {currentUser, userToken, setCurrentUser, setUserToken} = userStateContext();
 
   if(!userToken){
     return <Navigate to='/login'/>
+  }
+
+  const logout = (ev) => {
+    ev.preventDefault();
+    axiosClient.post('/logout')
+    .then( (result) => {
+      setCurrentUser({})
+      setUserToken(null)
+    })
   }
 
   return (
@@ -79,7 +84,7 @@ export default function DefaultLayout() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <UserIcon className='h-8 p-2 w-8 bg-black/25 rounded-full text-white' />
+                            <UserIcon className='h-8 p-2 w-8 bg-black/25 rounded-full text-white' />{currentUser.name}
                           </Menu.Button>
                         </div>
                         <Transition
